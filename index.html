@@ -28,7 +28,7 @@
             background: radial-gradient(circle at center, #2e142e 0%, #0d0614 100%);
         }
 
-        
+        /* ZARF ALANI */
         .envelope-wrapper {
             cursor: pointer;
             text-align: center;
@@ -82,7 +82,7 @@
             pointer-events: none;
         }
 
-      
+        /* MEKTUP KARTI */
         .card-container {
             position: absolute;
             opacity: 0;
@@ -147,12 +147,12 @@
             40% { transform: translateY(-5px); }
         }
 
-        
+        /* EKRANDA AÇAN ÇİÇEKLER VE SÖZLER */
         .spawned-flower {
             position: absolute;
             font-size: 2.3rem;
             pointer-events: none;
-            z-index: 25;
+            z-index: 50; /* Kartın üstünde gözükmesi için z-index artırıldı */
             animation: popFlower 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.27) forwards;
         }
 
@@ -161,13 +161,13 @@
             font-size: 0.95rem;
             font-weight: 700;
             color: #ffffff;
-            background: rgba(255, 105, 180, 0.45);
+            background: rgba(255, 105, 180, 0.65);
             backdrop-filter: blur(5px);
             padding: 5px 14px;
             border-radius: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.4);
             pointer-events: none;
-            z-index: 26;
+            z-index: 51; /* Kartın üstünde gözükmesi için z-index artırıldı */
             animation: floatUpText 2s ease-out forwards;
             white-space: nowrap;
         }
@@ -197,15 +197,15 @@
 
     <canvas id="canvas"></canvas>
 
-  
+    <!-- ZARF -->
     <div class="envelope-wrapper" id="envelopeBtn">
         <div class="envelope">
-           <span class="envelope-text">Sadece senin için... ✉️</span>
+            <span class="heart-seal">💌</span>
         </div>
         <div class="envelope-hint">Mektubu açmak için dokun ✨</div>
     </div>
 
-  
+    <!-- MEKTUP KARTI -->
     <div class="card-container" id="mainCard">
         <div class="card-title">Hayatıma Açan En Güzel Çiçeğe... 🌸</div>
         <div class="card-body" id="typedText"></div>
@@ -223,25 +223,25 @@
         let width = canvas.width = window.innerWidth;
         let height = canvas.height = window.innerHeight;
 
-       
-        const message = "Sen yeryüzünde bulunan tüm çiçeklerin kıskanacağı türde yalnız kalbimin içinde açan bir çiçeksin . Zarfa tıklayarak karanlığın içerisinde çiçekler açtırdığın gibi benim içimde de kendinden parçalar taşıyan bir bahar bahçesi oluşturdun. Hayatımın Linası  İyi ki varsın... 💕";
+        // DAKTİLO MESAJI
+        const message = "Sana senden daha güzel bir çiçek bulmak için dünyadaki bütün bahçeleri gezmem gerekirdi... Ama biliyorum ki ne kadar arasam da nafile. Çünkü sen sadece bir çiçek değil, benim dünyama açan en güzel baharsın. İyi ki varsın... 💕";
         let charIndex = 0;
 
-       
+        // ÇİÇEK & SÖZ LİSTESİ
         const flowerEmojis = ['🌸', '🌺', '🌷', '🌹', '🌻', '🌼', '💐', '✨'];
         const cuteWords = [
             "En güzel baharım ✨", 
-            "Bebeisim 🌸", 
+            "Gülüşü güzelim 🌸", 
             "İyi ki varsın 💕", 
-            "Hayatımın Linası 🌟", 
+            "Işığım 🌟", 
             "Çiçeğim 🌷", 
-            "Güzelim 💖",
-            "Hatunum 🌍"
+            "Huzurum 💖",
+            "Dünyam 🌍"
         ];
 
         let isActive = false;
 
-        
+        // ZARF TIKLAMA
         envelopeBtn.addEventListener('click', () => {
             envelopeBtn.classList.add('hide');
             document.body.classList.add('active-theme');
@@ -255,7 +255,7 @@
             }, 700);
         });
 
-     
+        // DAKTİLO EFEKTİ
         function startTyping() {
             if (charIndex < message.length) {
                 typedTextEl.innerHTML += message.charAt(charIndex);
@@ -266,10 +266,11 @@
             }
         }
 
-       
+        // TIKLAYINCA ÇİÇEK AÇMA (Her yere tıklanabilir kılındı)
         window.addEventListener('click', (e) => {
             if (!isActive) return;
-            if (e.target.closest('.card-container')) return;
+            // Zarf düğmesine tıklanırken çiçek açmasın
+            if (e.target.closest('#envelopeBtn')) return;
 
             spawnFlower(e.clientX, e.clientY);
         });
@@ -293,7 +294,7 @@
             setTimeout(() => text.remove(), 2000);
         }
 
-        
+        // KANVAS ARKA PLAN EFEKTLERİ
         let petals = [];
         let particles = [];
 
@@ -357,17 +358,15 @@
         function animate() {
             ctx.clearRect(0, 0, width, height);
 
-            
             petals.forEach(p => {
                 p.update();
                 p.draw();
             });
 
-           
             particles.forEach((p, index) => {
                 p.x += p.vx;
                 p.y += p.vy;
-                p.vy += 0.12; // yerçekimi
+                p.vy += 0.12;
                 p.alpha -= 0.015;
 
                 ctx.save();
